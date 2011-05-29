@@ -1,0 +1,9 @@
+[ { "file" : "index.html",          "class": "index" },
+  { "file" : "authentication.html", "class": "auth" },
+  { "file" : "product.1.html", 	    "class": "product" },	
+  { "file" : "product.2.html", 	    "class": "product" },
+  { "file" : "product.3.html", 	    "class": "product" },
+  { "file" : "userhome.html", 	    "class": "userhome" } ]
+  
+    
+  

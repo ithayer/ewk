@@ -1,3 +1,5 @@
+;; Dataset manipulation functions.
+
 (ns ewk.dataset
   (:require [clojure.contrib.logging :as lg])
   (:require [clojure.contrib.string  :as string])
@@ -5,8 +7,6 @@
   (:use clojure.pprint)
   (:use clojure.contrib.json))
 
-;; Dataset manipulation.
-;; 
 ;; Dataset formats are like
 (def example-dataset 
      [ {:file "index.html" :class "index" :features { :is_home 1.0 :a 1.0 } } ])
@@ -33,6 +33,9 @@
   ;; and apply the featureset-fn to the data.
   (remove nil?
 	  (map #(read-single (join-path base-dir (:file %)) % featureset-fn) files-spec)))
-  
+
+(defn read-files-spec [json-file]
+  "'json-file' is a filename for a json file that contains a filespec."
+  (read-json (slurp json-file)))
   
 
