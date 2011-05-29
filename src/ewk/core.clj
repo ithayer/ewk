@@ -19,7 +19,7 @@
                                              (map 
                                                #(keyword (% :class))
                                                dataset)))})
-                     (map #(conj (vals (% :features)) (:class %)) dataset)]
+                     (map #(conj (vals (% :features)) (:class %)) dataset))]
     (do
       (data/dataset-set-class new-dataset :class)
       new-dataset)))
