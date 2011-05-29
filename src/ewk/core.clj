@@ -9,12 +9,9 @@
   (:use clojure.contrib.json)
   (:gen-class))
 
-(defn -main [& args]
-  (lg/info (str "Running with args: " (string/join " " args))))
-
 (def example-dataset 
      [ {:file "index.html" :class "index" :features { :is_home 1.0 :a 1.0 } } 
-      {:file "index.html" :class "product detail" :features { :is_home 0.0 :a 3.0 } } ])
+       {:file "index.html" :class "product detail" :features { :is_home 0.0 :a 3.0 } } ])
 
 (defn- create-dataset
   "Convert the dataset map into an instance of a weka dataset."
@@ -39,11 +36,16 @@
       (classifiers/classifier-train classifier dataset)
       classifier)))
 
-(defn add-features-to-dataset
+(defn compute-document-features
   "Evaluates the feature functions defined in ewk.features for the provided
   html. Returns a map of feature name to result."
   [html]
-  (let [features (ns-publics 'ewk.features) html-input (html/html-snippet html)]
+  (let [features   (ns-publics 'ewk.features) 
+	html-input (html/html-snippet html)]
     (zipmap
       (map keyword (keys features))
       (map #(% html-input) (vals features)))))
+
+(defn -main [& args]
+  (lg/info (str "Running with args: " (string/join " " args))))
+
