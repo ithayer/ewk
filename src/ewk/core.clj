@@ -26,12 +26,6 @@
       (data/dataset-set-class new-dataset :class)
       new-dataset)))
 
-(defn create-instance
-  [vec-map-dataset instance]
-  (let [dataset (create-dataset vec-map-dataset)]
-    (data/make-instance dataset (conj (vals (instance :features))
-                                      (instance :class)))))
-
 (defn train-model
   "Given a clj-ml dataset, create and train a classifier."
   [vec-map-dataset]
@@ -41,24 +35,34 @@
       (classifiers/classifier-train classifier dataset)
       classifier)))
 
-(def example-dataset
-  [{:file "index.html" :class "home" :features { :is_home 1.0}} 
-         {:file "index.html" :class "product detail" :features { :is_home 0.0}}])
+(defn classify-instance
+  "Given a dataset, a model and an instance, return the model's guess at the
+  instance's class."
+  [vec-map-dataset model map-instance]
+  (let [dataset (create-dataset vec-map-dataset)
+        instance (data/make-instance dataset
+                                     (conj (vals (map-instance :features))
+                                      (map-instance :class)))]
+    (.value (.classAttribute instance)
+            (classifiers/classifier-classify model instance))))
 
-
-(defn test-train-model
+(defn- test-train-model
   "Check that a simple case works as expected"
   []
   (let [example-dataset 
         [{:file "index.html" :class "home" :features { :is_home 1.0}} 
          {:file "index.html" :class "product detail" :features { :is_home 0.0}}]]
-    (let [model (train-model example-dataset)
-          test-instance (create-instance example-dataset
-                            {:file "test.html" :class "home" :features {:is_home 1.0}})]
-      (if (=
-            (.value (.classAttribute test-instance)
-                    (classifiers/classifier-classify model test-instance))
-            ("home"))))))
+    (let [model (train-model example-dataset)]
+      (= "home"
+         (classify-instance example-dataset model
+            {:file "test.html" :class "home" :features {:is_home 1.0}})))))
+
+(defn cross-validate-model
+  "Check that a model is accurate by comparing its classifications of the
+  training dataset to the training data."
+  [vec-map-dataset model]
+  (map #(= (:class %)
+           (classify-instance vec-map-dataset model %)) vec-map-dataset))
 
 (defn add-features-to-dataset
   "Evaluates the feature functions defined in ewk.features for the provided
