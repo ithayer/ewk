@@ -9,10 +9,6 @@
   (:use clojure.contrib.json)
   (:gen-class))
 
-(def example-dataset 
-     [ {:file "index.html" :class "index" :features { :is_home 1.0 :a 1.0 } } 
-       {:file "index.html" :class "product detail" :features { :is_home 0.0 :a 3.0 } } ])
-
 (defn- create-dataset
   "Convert the dataset map into an instance of a weka dataset."
   [[{features :features} :as dataset]]
@@ -42,9 +38,9 @@
       (classifiers/classifier-train classifier dataset)
       classifier)))
 
-(def example-dataset
-  [{:file "index.html" :class "home" :features { :is_home 1.0}} 
-         {:file "index.html" :class "product detail" :features { :is_home 0.0}}])
+(def example-dataset 
+     [{:file "index.html" :class "index" :features { :is_home 1.0 :a 1.0 } } 
+      {:file "index.html" :class "product detail" :features { :is_home 0.0 :a 3.0 } } ])
 
 
 (defn test-train-model
