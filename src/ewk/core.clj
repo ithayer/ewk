@@ -81,4 +81,6 @@
   (let [base-dir   (first args)
 	files-spec (ds/read-files-spec (str base-dir "/spec.json"))
 	dataset    (ds/read-dataset base-dir files-spec compute-document-features)]
-    (lg/info (str "Read dataset of " (count dataset) " items from " base-dir))))
+    (do
+      (lg/info (str "Read dataset of " (count dataset) " items from " base-dir))
+      (cross-validate-model dataset (train-model dataset)))))
