@@ -25,7 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Public interface.
 
-(defn read [base-dir files-spec featureset-fn]
+(defn read-dataset [base-dir files-spec featureset-fn]
   "Reads a specification of a set of files and classes to a dataset map.
    eg: (read '/home/user/data' [ { :file 'index.html' :class } ] myfn)
    myfn maps html -> a map of features. The result of that gets added to the :features key."
