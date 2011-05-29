@@ -11,8 +11,10 @@
   (lg/info (str "Running with args: " (string/join " " args))))
 
 (defn add-features-to-dataset
+  "Evaluates the feature functions defined in ewk.features for the provided
+  html. Returns a map of feature name to result."
   [html]
-  (let [features (ns-publics 'ewk.features)]
+  (let [features (ns-publics 'ewk.features) html-input (html/html-snippet html)]
     (zipmap
       (map keyword (keys features))
-      (map #(% html) (vals features)))))
+      (map #(% html-input) (vals features)))))
