@@ -13,8 +13,6 @@
 (defn add-features-to-dataset
   [html]
   (let [features (ns-publics 'ewk.features)]
-    (hash-map :html html
-              :features (apply hash-map
-                               (interleave
-                                 (map keyword (keys features))
-                                 (map #(% html) (vals features)))))))
+    (zipmap
+      (map keyword (keys features))
+      (map #(% html) (vals features)))))
