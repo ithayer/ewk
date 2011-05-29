@@ -9,9 +9,6 @@
   (:use clojure.contrib.json)
   (:gen-class))
 
-(defn -main [& args]
-  (lg/info (str "Running with args: " (string/join " " args))))
-
 (defn- create-dataset
   "Convert the dataset map into an instance of a weka dataset."
   [[{features :features} :as dataset]]
@@ -35,6 +32,7 @@
       (classifiers/classifier-train classifier dataset)
       classifier)))
 
+<<<<<<< HEAD
 (defn classify-instance
   "Given a dataset, a model and an instance, return the model's guess at the
   instance's class."
@@ -45,6 +43,12 @@
                                       (map-instance :class)))]
     (.value (.classAttribute instance)
             (classifiers/classifier-classify model instance))))
+=======
+(def example-dataset 
+     [{:file "index.html" :class "index" :features { :is_home 1.0 :a 1.0 } } 
+      {:file "index.html" :class "product detail" :features { :is_home 0.0 :a 3.0 } } ])
+
+>>>>>>> 7a884a8a09499710ac7b259e9425f1fd5bbe4682
 
 (defn- test-train-model
   "Check that a simple case works as expected"
@@ -52,6 +56,7 @@
   (let [example-dataset 
         [{:file "index.html" :class "home" :features { :is_home 1.0}} 
          {:file "index.html" :class "product detail" :features { :is_home 0.0}}]]
+<<<<<<< HEAD
     (let [model (train-model example-dataset)]
       (= "home"
          (classify-instance example-dataset model
@@ -63,12 +68,25 @@
   [vec-map-dataset model]
   (map #(= (:class %)
            (classify-instance vec-map-dataset model %)) vec-map-dataset))
+=======
+    (let [model (train-model example-dataset)
+          test-instance (create-instance example-dataset
+                            {:file "test.html" :class "home" :features {:is_home 1.0}})]
+      (when (= (.value (.classAttribute test-instance)
+		       (classifiers/classifier-classify model test-instance))
+	       ("home"))))))
+>>>>>>> 7a884a8a09499710ac7b259e9425f1fd5bbe4682
 
-(defn add-features-to-dataset
+(defn compute-document-features
   "Evaluates the feature functions defined in ewk.features for the provided
   html. Returns a map of feature name to result."
   [html]
-  (let [features (ns-publics 'ewk.features) html-input (html/html-snippet html)]
+  (let [features   (ns-publics 'ewk.features) 
+	html-input (html/html-snippet html)]
     (zipmap
       (map keyword (keys features))
       (map #(% html-input) (vals features)))))
+
+(defn -main [& args]
+  (lg/info (str "Running with args: " (string/join " " args))))
+
