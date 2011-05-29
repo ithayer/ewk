@@ -63,24 +63,26 @@
   "Check that a model is accurate by comparing its classifications of the
   training dataset to the training data."
   [vec-map-dataset model]
-  (map #(= (:class %)
-           (classify-instance vec-map-dataset model %)) vec-map-dataset))
+  (map #(hash-map :original (:class %)
+                  :guess (classify-instance vec-map-dataset model %)
+                  :file (:file %))
+       vec-map-dataset))
 
-(defn- to-double [i]
-  "Checks the class of the object, and returns a float if it's not already."
-  (if (= (class i) java.lang.Double)
-    i
-    (if i 1.0 0.0)))
+  (defn- to-double [i]
+    "Checks the class of the object, and returns a float if it's not already."
+    (if (= (class i) java.lang.Double)
+      i
+      (if i 1.0 0.0)))
 
-(defn compute-document-features
-  "Evaluates the feature functions defined in ewk.features for the provided
-  html. Returns a map of feature name to result."
-  [html]
-  (let [features   (ns-publics 'ewk.features) 
-	html-input (html/html-snippet html)]
-    (zipmap
-      (map keyword (keys features))
-      (map #(to-double (% html-input)) (vals features)))))
+  (defn compute-document-features
+    "Evaluates the feature functions defined in ewk.features for the provided
+    html. Returns a map of feature name to result."
+    [html]
+    (let [features   (ns-publics 'ewk.features) 
+          html-input (html/html-snippet html)]
+      (zipmap
+        (map keyword (keys features))
+        (map #(to-double (% html-input)) (vals features)))))
 
 (defn -main [& args]
   (lg/info (str "Running with args: " (string/join " " args)))
@@ -89,4 +91,5 @@
 	dataset    (ds/read-dataset base-dir files-spec compute-document-features)]
     (do
       (lg/info (str "Read dataset of " (count dataset) " items from " base-dir))
-      (lg/info (str (cross-validate-model dataset (train-model dataset)))))))
+      (lg/info (apply str (cross-validate-model dataset
+                                                (train-model dataset)))))))
