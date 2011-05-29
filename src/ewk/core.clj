@@ -52,10 +52,9 @@
     (let [model (train-model example-dataset)
           test-instance (create-instance example-dataset
                             {:file "test.html" :class "home" :features {:is_home 1.0}})]
-      (if (=
-            (.value (.classAttribute test-instance)
-                    (classifiers/classifier-classify model test-instance))
-            ("home"))))))
+      (when (= (.value (.classAttribute test-instance)
+		       (classifiers/classifier-classify model test-instance))
+	       ("home"))))))
 
 (defn compute-document-features
   "Evaluates the feature functions defined in ewk.features for the provided
