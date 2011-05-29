@@ -83,4 +83,4 @@
 	dataset    (ds/read-dataset base-dir files-spec compute-document-features)]
     (do
       (lg/info (str "Read dataset of " (count dataset) " items from " base-dir))
-      (cross-validate-model dataset (train-model dataset)))))
+      (lg/info (str (cross-validate-model dataset (train-model dataset)))))))
