@@ -1,18 +1,17 @@
 h1. Introduction
 
-ewk is a probabilistic webpage classification library that uses enlive selectors and clojure functions as feature definitions. An example of a feature definiton is:
-
-<pre>
-{:name “is_home”            :at “p#currentpage” :extract (fn [xs] (= (first xs) “home”))}
-{:name “currentpage_length” :at “p#currentpage” :extract (fn [xs] (count (first xs)))}
-</pre>
-
-The 'extract' function is passed a list of matching html contents (as per enlive).
-The 'is_home' feature would be on if the page contains '&lt;p id='currentpage'&gt;home&lt;/p&gt;'.
-The 'currentpage_length' feature extracts the length of the 'currentpage' div.
+ewk is a probabilistic webpage classification library that uses enlive selectors and clojure functions as feature definitions. 
 
 Classification is done using clj-ml (a wrapper around the Weka
 library) and currently supports only logistic regression. This library
 makes it simple to specify feature sets and training data, and simple to run classification on html.
+
+This project is in a 'proof-of-concept' stage.
+
+To load a sample data file and run cross-validation on it run:
+
+<pre>
+./run ../data/amazon
+</pre>
 
 
