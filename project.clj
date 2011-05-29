@@ -8,5 +8,7 @@
                                               com.sun.jmx/jmxri]]
 		 [net.defn/enlive "1.0.0-SNAPSHOT"]
 		 [clj-ml "0.0.3-SNAPSHOT"]]
-  :dev-dependencies [[swank-clojure "1.4.0-SNAPSHOT"]]
+  :dev-dependencies [[swank-clojure "1.4.0-SNAPSHOT"]
+                     [org.clojars.autre/lein-vimclojure "1.0.0"]
+                     [vimclojure/server "2.2.0"]]
   :main ewk.core)
