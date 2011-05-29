@@ -1,10 +1,11 @@
 (ns ewk.core
   (:require [clojure.contrib.logging :as lg])
   (:require [clojure.contrib.string  :as string])
-  (:require [net.cgrand.enlive-html  :as html])
   (:require [ewk.features])
-  (:require [clj-ml.classifiers :as classifiers])
-  (:require [clj-ml.data :as data])
+  (:require [ewk.dataset             :as ds])
+  (:require [clj-ml.classifiers      :as classifiers])
+  (:require [clj-ml.data             :as data])
+  (:require [net.cgrand.enlive-html  :as html])
   (:use clojure.pprint)
   (:use clojure.contrib.json)
   (:gen-class))
@@ -42,7 +43,6 @@
      [{:file "index.html" :class "index" :features { :is_home 1.0 :a 1.0 } } 
       {:file "index.html" :class "product detail" :features { :is_home 0.0 :a 3.0 } } ])
 
-
 (defn test-train-model
   "Check that a simple case works as expected"
   []
@@ -67,5 +67,9 @@
       (map #(% html-input) (vals features)))))
 
 (defn -main [& args]
-  (lg/info (str "Running with args: " (string/join " " args))))
+  (lg/info (str "Running with args: " (string/join " " args)))
+  (let [base-dir   (first args)
+	files-spec (ds/read-files-spec (str base-dir "/spec.json"))
+	dataset    (ds/read-dataset base-dir files-spec compute-document-features)]
+    (lg/info (str "Read dataset of " (count dataset) " items from " base-dir))))
 
