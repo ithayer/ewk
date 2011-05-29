@@ -66,11 +66,11 @@
   (map #(= (:class %)
            (classify-instance vec-map-dataset model %)) vec-map-dataset))
 
-(defn- to-float [i]
+(defn- to-double [i]
   "Checks the class of the object, and returns a float if it's not already."
   (if (= (class i) java.lang.Double)
     i
-    (if i 1 0))))
+    (if i 1.0 0.0)))
 
 (defn compute-document-features
   "Evaluates the feature functions defined in ewk.features for the provided
@@ -80,7 +80,7 @@
 	html-input (html/html-snippet html)]
     (zipmap
       (map keyword (keys features))
-      (map #(to-float (% html-input)) (vals features)))))
+      (map #(to-double (% html-input)) (vals features)))))
 
 (defn -main [& args]
   (lg/info (str "Running with args: " (string/join " " args)))
