@@ -12,7 +12,8 @@
      [ {:file "index.html" :class "index" :features { :is_home 1.0 :a 1.0 } } ])
 
 (defn- read-single [filename meta featureset-fn]
-  "Reads a single file into a single document in a dataset."
+  "Reads a single file into a single document in a dataset. Merges
+   with existing 'meta' data."
   (if (-> filename (java-utils/file) .exists)
     (merge meta {:features (featureset-fn (slurp filename))})
     (lg/error (str "File " filename " doesn't exist."))))
